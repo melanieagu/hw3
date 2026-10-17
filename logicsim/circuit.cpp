@@ -13,7 +13,7 @@
 
 Circuit::Circuit() : m_current_time(0)
 {
-    
+
 }
 
 Circuit::~Circuit()
@@ -33,22 +33,22 @@ void Circuit::test()
     m_wires.push_back(new Wire(0, "input A"));
 	m_wires.push_back(new Wire(1, "input B"));
 	m_wires.push_back(new Wire(2, "output"));
-    
+
     Gate* g = new And2Gate(m_wires[0], m_wires[1], m_wires[2]);
 	m_gates.push_back(g);
-    
+
 	Event* e = new Event {0,m_wires[0],'0'};
 	m_pq.push(e);
-	
+
 	e = new Event {0,m_wires[1],'1'};
 	m_pq.push(e);
-	
+
 	e = new Event {4,m_wires[0],'1'};
 	m_pq.push(e);
 
   e = new Event {6,m_wires[1],'0'};
 	m_pq.push(e);
-	
+
 }
 
 bool Circuit::parse(const char* fname)
@@ -58,7 +58,7 @@ bool Circuit::parse(const char* fname)
     {
         return false;
     }
-    
+
     std::string line;
     while( getline(inFile, line))
     {
@@ -110,6 +110,14 @@ bool Circuit::parse(const char* fname)
                     m_gates.push_back(new Or2Gate(m_wires[stoi(s_in1)], m_wires[stoi(s_in2)], m_wires[stoi(s_output)]));
                 }
                 //Add code here to support the NOT gate type
+                if (s_type == "NOT"){
+                    std::string s_in;
+                    getline(ss, s_in, ',');
+                    std::string s_output;
+                    getline(ss,s_output,',');
+
+                    m_gates.push_back(new NotGate(m_wires[stoi(s_in)], m_wires[stoi(s_output)]));
+                }
             }
         }
         if(line == "INJECT")
@@ -142,12 +150,12 @@ bool Circuit::advance(std::ostream& os)
 	{
 		return false;
 	}
-    
+
     m_current_time = m_pq.top()->time;
     std::stringstream ss;
     ss << "@" << m_current_time << std::endl;
     bool updated = false;
-    
+
     while(m_pq.top()->time == m_current_time)
     {
         if(m_pq.size() >= 1)
@@ -166,7 +174,7 @@ bool Circuit::advance(std::ostream& os)
         {
             break;
         }
-        
+
     }
     if(updated)
     {
@@ -185,9 +193,9 @@ bool Circuit::advance(std::ostream& os)
 
 void Circuit::run(std::ostream& os)
 {
-	
+
 	while(advance(os)){
-        
+
 	}
 }
 
@@ -211,7 +219,7 @@ void Circuit::startUml(std::ostream& os)
 				}
 		}
     os << std::endl;
-    
+
 }
 
 void Circuit::endUml(std::ostream& os)

@@ -67,7 +67,16 @@ void dealloc(Node* head)
 //   function object struct declarations
 // -----------------------------------------------
 
+//added in functor to test llfilter
+struct RemoveOdd {
+    bool operator() (int value)
 
+    {
+        return value % 2 !=0;
+
+    }
+
+};
 
 
 
@@ -86,10 +95,35 @@ int main(int argc, char* argv[])
     print(head);
 
     // Test out your linked list code
+    //testing for pivot
+    Node* smaller = nullptr;
+    Node* larger = nullptr;
+    llpivot(head,smaller,larger,10);
+
+    cout << "head after pivot: ";
+    print(head);
+
+    cout << "smaller list: ";
+    print(smaller);
+
+    cout << "larger list: ";
+    print(larger);
+
+    dealloc(smaller);
+    dealloc(larger);
+
+    //testing for filter
+    head = readList(argv[1]);
+
+    //func test
+    RemoveOdd pred;
+    head = llfilter(head,pred);
+
+    cout << "filter list: ";
+    print(head);
+    dealloc(head);
 
 
-
-    
     return 0;
 
 }

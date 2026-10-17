@@ -26,7 +26,7 @@ struct Node
  * upon return and head set to NULL (i.e. we are not making copies)
  * in the smaller and larger lists but simply moving Nodes out of
  * the input list and into the two other lists.
- * 
+ *
  * ==============================================================
  * MUST RUN IN O(n) where n is the number of nodes in the input list
  * ==============================================================
@@ -80,10 +80,22 @@ Node* llfilter(Node* head, Comp pred);
 template <typename Comp>
 Node* llfilter(Node* head, Comp pred)
 {
-    //*********************************************
-    // Provide your implementation below
-    //*********************************************
+//BASE CASE
+if (head == nullptr) {
+    return head;
+}
+//rec step (Rest of list)
+head->next = llfilter(head->next, pred);
 
+//decide what to remove
+if (pred(head->val)){
+    //remove node
+    Node* result = head->next;
+    delete head;
+    return result;
+} else {
+    return head;
+}
 
 }
 
